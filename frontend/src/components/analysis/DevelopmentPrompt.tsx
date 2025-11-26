@@ -12,7 +12,6 @@ export default function DevelopmentPrompt({ analysis, idea }: DevelopmentPromptP
   const [copied, setCopied] = useState(false);
 
   const generatePrompt = () => {
-    const stack = analysis.technicalFeasibility?.stack?.join(', ') || 'React, TypeScript, Node.js, PostgreSQL';
     const features = analysis.roadmap?.map(phase => 
       `- ${phase.phase}: ${phase.goals.join(', ')}`
     ).join('\n') || '';
