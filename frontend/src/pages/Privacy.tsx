@@ -56,7 +56,7 @@ export default function Privacy() {
 
           <div className="prose prose-invert max-w-none mb-12">
             <p className="text-lg text-gray-300 leading-relaxed">
-              At IdeaValidate, we take your privacy seriously. This Privacy
+              At ValidIdea, we take your privacy seriously. This Privacy
               Policy explains how we collect, use, disclose, and safeguard your
               information when you visit our website and use our services.
               Please read this privacy policy carefully. If you do not agree
@@ -135,10 +135,10 @@ export default function Privacy() {
                 If you have questions or comments about this Privacy Policy,
                 please contact us at:{" "}
                 <a
-                  href="mailto:privacy@ideavalidate.com"
+                  href="mailto:privacy@ValidIdea.com"
                   className="text-[#5D5FEF] hover:text-[#4B4ACF]"
                 >
-                  privacy@ideavalidate.com
+                  privacy@ValidIdea.com
                 </a>
               </p>
             </section>

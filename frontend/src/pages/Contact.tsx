@@ -54,7 +54,7 @@ export default function Contact() {
           <div>
             <h1 className="text-4xl font-bold text-white mb-4">Get in Touch</h1>
             <p className="text-gray-400 text-lg mb-8">
-              Have questions about IdeaValidate? We're here to help. Fill out
+              Have questions about ValidIdea? We're here to help. Fill out
               the form or reach us via email.
             </p>
 
@@ -69,10 +69,10 @@ export default function Contact() {
                     For general inquiries and support
                   </p>
                   <a
-                    href="mailto:support@ideavalidate.com"
+                    href="mailto:support@ValidIdea.com"
                     className="text-[#5D5FEF] hover:text-[#4B4ACF] transition-colors"
                   >
-                    support@ideavalidate.com
+                    support@ValidIdea.com
                   </a>
                 </div>
               </div>

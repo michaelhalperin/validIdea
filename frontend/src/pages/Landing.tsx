@@ -218,7 +218,7 @@ export default function Landing() {
       image:
         "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&fit=crop&crop=faces",
       content:
-        "I was about to spend $50k developing an app that the market didn't need. IdeaValidate saved me 6 months of work.",
+        "I was about to spend $50k developing an app that the market didn't need. ValidIdea saved me 6 months of work.",
     },
     {
       name: "Marcus Rodriguez",

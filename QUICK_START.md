@@ -55,7 +55,7 @@ For file uploads to work, you need to either:
 
 ### Backend won't start
 - Make sure PostgreSQL is running: `brew services list | grep postgresql`
-- Check `DATABASE_URL` in `backend/.env` uses your username: `postgresql://michael@localhost:5432/ideavalidate`
+- Check `DATABASE_URL` in `backend/.env` uses your username: `postgresql://michael@localhost:5432/ValidIdea`
 
 ### Frontend can't connect to backend
 - Make sure backend is running on port 3000
@@ -63,7 +63,7 @@ For file uploads to work, you need to either:
 
 ### Database errors
 - Restart PostgreSQL: `brew services restart postgresql@15`
-- Check connection: `psql -d ideavalidate`
+- Check connection: `psql -d ValidIdea`
 
 ## 📝 Next Steps
 

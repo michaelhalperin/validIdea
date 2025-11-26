@@ -41,7 +41,7 @@ export default function Terms() {
                 <h3 className="font-bold text-white">Agreement to Terms</h3>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed">
-                By accessing or using IdeaValidate, you agree to be bound by
+                By accessing or using ValidIdea, you agree to be bound by
                 these Terms and Conditions and our Privacy Policy. If you
                 disagree with any part of the terms, you may not access the
                 service.
@@ -55,7 +55,7 @@ export default function Terms() {
               </div>
               <p className="text-gray-400 text-sm leading-relaxed">
                 The service and its original content, features, and
-                functionality are owned by IdeaValidate. Your submitted ideas
+                functionality are owned by ValidIdea. Your submitted ideas
                 and data remain your intellectual property.
               </p>
             </div>
@@ -104,7 +104,7 @@ export default function Terms() {
                 <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm">
                   <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                   <p>
-                    IdeaValidate does not provide financial, legal, or
+                    ValidIdea does not provide financial, legal, or
                     professional advice. All analysis is for informational
                     purposes only.
                   </p>
@@ -131,7 +131,7 @@ export default function Terms() {
                 <p>
                   At the end of each Billing Cycle, your Subscription will
                   automatically renew under the exact same conditions unless you
-                  cancel it or IdeaValidate cancels it.
+                  cancel it or ValidIdea cancels it.
                 </p>
               </div>
             </section>
@@ -164,10 +164,10 @@ export default function Terms() {
                 If you have any questions about these Terms, please contact us
                 at:{" "}
                 <a
-                  href="mailto:legal@ideavalidate.com"
+                  href="mailto:legal@ValidIdea.com"
                   className="text-[#5D5FEF] hover:text-[#4B4ACF]"
                 >
-                  legal@ideavalidate.com
+                  legal@ValidIdea.com
                 </a>
               </p>
             </section>

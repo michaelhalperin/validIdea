@@ -58,7 +58,7 @@ export default function Login() {
         <div className="w-8 h-8 rounded bg-[#5D5FEF] flex items-center justify-center">
           <Sparkles className="w-5 h-5" />
         </div>
-        IdeaValidate
+        ValidIdea
       </div>
 
       <motion.div

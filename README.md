@@ -1,4 +1,4 @@
-# IdeaValidate - Gemini-Powered Startup Idea Validator
+# ValidIdea - Gemini-Powered Startup Idea Validator
 
 A full-stack web application that uses Google Gemini AI to analyze startup ideas and provide comprehensive reports including market analysis, competitor research, SWOT analysis, technical feasibility, cost estimates, and roadmaps.
 
@@ -56,7 +56,7 @@ A full-stack web application that uses Google Gemini AI to analyze startup ideas
 
 ```bash
 git clone <repository-url>
-cd ideavalidate
+cd ValidIdea
 ```
 
 ### 2. Start Docker services
@@ -80,7 +80,7 @@ Create a `.env` file in the `backend` directory:
 
 ```env
 # Database
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/ideavalidate?schema=public"
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/ValidIdea?schema=public"
 
 # JWT
 JWT_SECRET="your-super-secret-jwt-key-change-in-production"
@@ -96,7 +96,7 @@ GEMINI_API_KEY="your-gemini-api-key"
 
 # File Storage (S3/MinIO)
 S3_ENDPOINT="http://localhost:9000"
-S3_BUCKET="ideavalidate"
+S3_BUCKET="ValidIdea"
 S3_ACCESS_KEY="minioadmin"
 S3_SECRET_KEY="minioadmin"
 S3_REGION="us-east-1"
@@ -161,13 +161,13 @@ The frontend will run on `http://localhost:5173`
 
 ### 5. Initialize MinIO Bucket
 
-Access MinIO console at `http://localhost:9001` (login: minioadmin/minioadmin) and create a bucket named `ideavalidate`.
+Access MinIO console at `http://localhost:9001` (login: minioadmin/minioadmin) and create a bucket named `ValidIdea`.
 
 ## Demo Credentials
 
 After running the seed script, you can use these credentials:
 
-- **Admin**: admin@ideavalidate.com / admin123
+- **Admin**: admin@ValidIdea.com / admin123
 - **User**: demo@example.com / user123
 
 ## API Endpoints

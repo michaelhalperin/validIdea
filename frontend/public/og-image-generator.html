@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OG Image Generator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #030303;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .og-image {
+      width: 1200px;
+      height: 630px;
+      background: linear-gradient(135deg, #030303 0%, #0A0A0A 50%, #030303 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px;
+    }
+    
+    .bg-gradient-1 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+      top: -200px;
+      left: -200px;
+      filter: blur(80px);
+    }
+    
+    .bg-gradient-2 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 70%);
+      bottom: -150px;
+      right: -150px;
+      filter: blur(80px);
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .logo-box {
+      width: 100px;
+      height: 100px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+    }
+    
+    h1 {
+      font-size: 64px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 20px;
+      line-height: 1.1;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      font-size: 36px;
+      font-weight: 600;
+      color: #9CA3AF;
+      margin-bottom: 30px;
+      line-height: 1.3;
+    }
+    
+    .description {
+      font-size: 24px;
+      color: #6B7280;
+      margin-bottom: 40px;
+      line-height: 1.6;
+      max-width: 800px;
+    }
+    
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 20px;
+      color: #D1D5DB;
+    }
+    
+    .feature-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    .dot-1 { background: #6366F1; }
+    .dot-2 { background: #8B5CF6; }
+    .dot-3 { background: #EC4899; }
+    
+    @media print {
+      body {
+        padding: 0;
+      }
+      .og-image {
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="og-image">
+    <div class="bg-gradient-1"></div>
+    <div class="bg-gradient-2"></div>
+    
+    <div class="content">
+      <div class="logo-area">
+        <div class="logo-box">VI</div>
+      </div>
+      
+      <h1>IdeaValidate</h1>
+      <div class="subtitle gradient-text">AI-Powered Startup Idea Analysis</div>
+      
+      <div class="description">
+        Validate your startup ideas with comprehensive market research, competitor analysis & MVP roadmaps
+      </div>
+      
+      <div class="features">
+        <div class="feature">
+          <div class="feature-dot dot-1"></div>
+          <span>Market Size Analysis (TAM/SAM/SOM)</span>
+        </div>
+        <div class="feature">
+          <div class="feature-dot dot-2"></div>
+          <span>Competitor Research & SWOT Analysis</span>
+        </div>
+        <div class="feature">
+          <div class="feature-dot dot-3"></div>
+          <span>Technical Feasibility & MVP Roadmap</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Instructions for converting to PNG:
+    // 1. Open this file in a browser
+    // 2. Right-click on the og-image div
+    // 3. Use browser DevTools to set exact size (1200x630)
+    // 4. Use a screenshot tool or browser extension to capture
+    // 5. Or use online tools like htmlcsstoimage.com
+    console.log('To convert to PNG:');
+    console.log('1. Use browser DevTools to ensure exact 1200x630 size');
+    console.log('2. Use screenshot tool or htmlcsstoimage.com');
+    console.log('3. Save as og-image.png in frontend/public/');
+  </script>
+</body>
+</html>
+

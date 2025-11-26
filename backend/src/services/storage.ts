@@ -11,7 +11,7 @@ const s3Client = new S3Client({
   forcePathStyle: true, // Required for MinIO
 });
 
-const BUCKET = process.env.S3_BUCKET || 'ideavalidate';
+const BUCKET = process.env.S3_BUCKET || 'ValidIdea';
 
 export async function uploadFile(
   file: Express.Multer.File,

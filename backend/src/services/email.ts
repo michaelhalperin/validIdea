@@ -3,7 +3,7 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM_EMAIL =
-  process.env.EMAIL_FROM || "IdeaValidate <onboarding@resend.dev>";
+  process.env.EMAIL_FROM || "ValidIdea <onboarding@resend.dev>";
 
 export async function sendWelcomeEmail(email: string, name?: string) {
   try {
@@ -12,12 +12,12 @@ export async function sendWelcomeEmail(email: string, name?: string) {
     await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: "Welcome to IdeaValidate! 🚀",
+      subject: "Welcome to ValidIdea! 🚀",
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #5D5FEF;">Welcome to IdeaValidate</h1>
+          <h1 style="color: #5D5FEF;">Welcome to ValidIdea</h1>
           <p>Hi ${firstName},</p>
-          <p>Thanks for joining IdeaValidate! We're excited to help you deconstruct and validate your next big idea.</p>
+          <p>Thanks for joining ValidIdea! We're excited to help you deconstruct and validate your next big idea.</p>
           <p>You can now:</p>
           <ul>
             <li>Submit your startup concepts for deep analysis</li>
@@ -31,7 +31,7 @@ export async function sendWelcomeEmail(email: string, name?: string) {
           </p>
           <p style="color: #666; margin-top: 30px; font-size: 12px;">
             Happy building,<br>
-            The IdeaValidate Team
+            The ValidIdea Team
           </p>
         </div>
       `,
@@ -74,7 +74,7 @@ export async function sendAnalysisCompleteEmail(
           </ul>
           <p style="color: #666; margin-top: 30px; font-size: 12px;">
             Keep iterating,<br>
-            The IdeaValidate Team
+            The ValidIdea Team
           </p>
         </div>
       `,
@@ -104,11 +104,11 @@ export async function sendPasswordResetEmail(
     const result = await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: "Reset your IdeaValidate password",
+      subject: "Reset your ValidIdea password",
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
           <h1 style="color: #5D5FEF;">Reset Password</h1>
-          <p>We received a request to reset the password for your IdeaValidate account.</p>
+          <p>We received a request to reset the password for your ValidIdea account.</p>
           <p>Click the button below to reset your password. This link is valid for 1 hour.</p>
           <p>
             <a href="${resetUrl}" style="background-color: #5D5FEF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 10px;">Reset Password</a>
@@ -148,7 +148,7 @@ export async function sendVerificationEmail(
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
           <h1 style="color: #5D5FEF;">Verify Your Email</h1>
-          <p>Thanks for signing up for IdeaValidate! Please verify your email address to access your dashboard.</p>
+          <p>Thanks for signing up for ValidIdea! Please verify your email address to access your dashboard.</p>
           <p>
             <a href="${verificationUrl}" style="background-color: #5D5FEF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 10px;">Verify Email</a>
           </p>
@@ -190,7 +190,7 @@ export async function sendContactEmail(
             <p style="color: #666; line-height: 1.6; white-space: pre-wrap;">${message}</p>
           </div>
           <p style="color: #666; margin-top: 30px; font-size: 12px;">
-            This email was sent from the IdeaValidate contact form.
+            This email was sent from the ValidIdea contact form.
           </p>
         </div>
       `,
