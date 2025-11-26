@@ -1,6 +1,16 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+// Determine API URL based on environment
+const getApiUrl = () => {
+  // Production: use environment variable or default to production backend
+  if (import.meta.env.PROD) {
+    return import.meta.env.VITE_API_URL || 'https://valididea.onrender.com/api';
+  }
+  // Development: use localhost
+  return import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+};
+
+const API_URL = getApiUrl();
 
 const api = axios.create({
   baseURL: API_URL,

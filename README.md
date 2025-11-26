@@ -195,31 +195,19 @@ After running the seed script, you can use these credentials:
 
 ## Deployment
 
-### Frontend (Vercel)
+For detailed deployment instructions including environment configuration for both development and production, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Navigate to frontend directory: `cd frontend`
-3. Run: `vercel`
-4. Set environment variable: `VITE_API_URL` to your backend URL
+### Quick Setup
 
-### Backend (Render/Heroku)
+**Frontend (Vercel)**:
+- Set `VITE_API_URL=https://valididea.onrender.com/api` in Vercel environment variables
 
-#### Render
+**Backend (Render)**:
+- Set `FRONTEND_URL=https://valid-idea.vercel.app` in Render environment variables
+- Set `ALLOWED_ORIGINS=https://valid-idea.vercel.app` for CORS
+- Configure all other required environment variables (see `ENV_SETUP.md`)
 
-1. Create a new Web Service on Render
-2. Connect your repository
-3. Set build command: `cd backend && npm install && npm run build`
-4. Set start command: `cd backend && npm start`
-5. Add environment variables from your `.env` file
-6. Add PostgreSQL database and update `DATABASE_URL`
-
-#### Heroku
-
-1. Install Heroku CLI
-2. Create app: `heroku create your-app-name`
-3. Add PostgreSQL: `heroku addons:create heroku-postgresql:hobby-dev`
-4. Set environment variables: `heroku config:set KEY=value`
-5. Deploy: `git push heroku main`
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete instructions.
 
 ### Database Migrations
 
@@ -267,7 +255,7 @@ npm test
 
 ## Environment Variables
 
-See `.env.example` files in both `frontend` and `backend` directories for all required environment variables.
+See [ENV_SETUP.md](./ENV_SETUP.md) for detailed environment variable configuration for both development and production environments.
 
 ## License
 

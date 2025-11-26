@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /profile
+Disallow: /results/
+Disallow: /history
+Disallow: /new-idea
+
+Sitemap: https://valid-idea.vercel.app/sitemap.xml
+

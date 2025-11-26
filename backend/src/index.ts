@@ -23,9 +23,17 @@ app.use(cors({
       return callback(null, true);
     }
     
-    // Allow the configured frontend URL
-    const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5174';
-    if (origin === allowedOrigin) {
+    // Get allowed origins from environment (comma-separated) or use defaults
+    const allowedOrigins = process.env.ALLOWED_ORIGINS 
+      ? process.env.ALLOWED_ORIGINS.split(',').map(url => url.trim())
+      : [
+          process.env.FRONTEND_URL || 'http://localhost:5174',
+          'https://valid-idea.vercel.app',
+          'http://localhost:5174'
+        ];
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
     
