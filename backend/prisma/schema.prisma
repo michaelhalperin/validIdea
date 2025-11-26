@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String?   // nullable for OAuth users
+  name          String?
+  image         String?
+  role          Role      @default(USER)
+  googleId      String?   @unique
+  credits       Int       @default(10) // Monthly credits
+  creditsUsed   Int       @default(0)
+  lastCreditReset DateTime @default(now())
+  // Notification preferences
+  notifyEmail   Boolean   @default(true) // Analysis completion emails
+  notifyUpdates Boolean   @default(false) // Product updates
+  notifyMarketing Boolean @default(true) // Weekly digest
+  
+  // Reset Token
+  resetToken        String?
+  resetTokenExpires DateTime?
+
+  // Email Verification
+  isVerified        Boolean   @default(false)
+  verificationToken String?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  ideas         Idea[]
+  analyses      Analysis[]
+
+  @@map("users")
+}
+
+model Idea {
+  id          String     @id @default(cuid())
+  title       String
+  oneLiner    String
+  description String     @db.Text
+  userId      String
+  status      IdeaStatus @default(DRAFT)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attachments Attachment[]
+  analyses    Analysis[]
+
+  @@map("ideas")
+}
+
+model Attachment {
+  id          String   @id @default(cuid())
+  ideaId      String
+  type        AttachmentType
+  url         String
+  fileName    String?
+  fileSize    Int?
+  mimeType    String?
+  metadata    Json?    // For storing additional info (e.g., video duration, slide count)
+  createdAt   DateTime @default(now())
+  idea        Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  @@map("attachments")
+}
+
+model Analysis {
+  id              String   @id @default(cuid())
+  ideaId          String
+  userId          String
+  rawOutput       Json     // Store raw Gemini response
+  executiveSummary String?  @db.Text
+  marketSize      Json?    // {tamn_estimate_usd, reasoning, data_points}
+  competitors     Json?    // Array of competitor objects
+  swot            Json?    // {strengths, weaknesses, opportunities, threats}
+  technicalFeasibility Json? // {stack, complexity_rating, estimated_dev_months}
+  costEstimate    Json?    // {dev_cost_usd, cogs_first_year_usd, marketing_first_year_usd, assumptions}
+  roadmap         Json?    // Array of phase objects
+  nextSteps       String?  @db.Text
+  investorPitch   Json?    // {one_liner, 60s_pitch}
+  confidenceOverall Int?   // 0-100
+  keywords        String[] // Array of strings
+  marketTrends    Json?    // Array of trend objects
+  deepResearch    Json?    // Array of research objects
+  userPersonas    Json?    // Array of persona objects
+  marketingChannels Json?  // Array of channel objects
+  revenueStreams  Json?    // Array of revenue objects
+  tokenUsage      Int?     // Track API usage
+
+  // New fields for enhanced analysis
+  opportunity     Json?    // { score: number, problem: string, feasibility: string, why_now: string, unfair_advantage: string }
+  businessFit     Json?    // { revenue_potential: string, execution_difficulty: string, go_to_market: string }
+  offerStructure  Json?    // { lead_magnet: string, frontend: string, core: string, backend: string, continuity: string }
+  categorization  Json?    // { type: string, market: string, target: string, main_competitor: string }
+  whyNow          String?  @db.Text // Specific "Why Now" narrative
+  signals         Json?    // { community: string, search_volume: string, market_gap: string }
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  idea            Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("analyses")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum IdeaStatus {
+  DRAFT
+  ANALYZING
+  COMPLETED
+  FAILED
+}
+
+enum AttachmentType {
+  IMAGE
+  PDF
+  SLIDE_LINK
+  VIDEO_LINK
+  OTHER
+}

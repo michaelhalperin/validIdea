@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" fill="none">
+  <!-- Icon -->
+  <g transform="translate(20, 10)">
+    <!-- Outer Hexagon -->
+    <path d="M40 5 L75 25 L75 65 L40 85 L5 65 L5 25 Z" stroke="url(#grad1)" stroke-width="4" fill="rgba(99, 102, 241, 0.1)"/>
+    
+    <!-- Inner Elements -->
+    <path d="M40 25 L40 65" stroke="url(#grad2)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M25 35 L55 35" stroke="url(#grad2)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M25 55 L55 55" stroke="url(#grad2)" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Sparkle Accent -->
+    <path d="M65 15 L68 8 L71 15 L78 18 L71 21 L68 28 L65 21 L58 18 Z" fill="#F472B6"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="110" y="65" font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="60" fill="white" letter-spacing="-1">
+    Valid<tspan fill="url(#grad1)">Idea</tspan>
+  </text>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#EC4899" />
+    </linearGradient>
+  </defs>
+</svg>
