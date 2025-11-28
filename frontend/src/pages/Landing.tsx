@@ -437,11 +437,6 @@ export default function Landing() {
                     delay={1.4}
                   />
                 </div>
-
-                <div className="mt-6 pt-6 border-t border-white/10 flex justify-between items-center text-xs text-gray-500">
-                  <span>Generated in 2.4s</span>
-                  <span>AI Model: Gemini Pro</span>
-                </div>
               </motion.div>
             </div>
           </motion.div>

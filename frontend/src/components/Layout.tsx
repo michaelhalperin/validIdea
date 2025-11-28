@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LayoutGrid, Plus, History, Menu, ChevronRight } from "lucide-react";
+import { LayoutGrid, Plus, History, Menu, ChevronRight, Sparkles, BarChart3, GitCompare, Bell } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
 
@@ -19,8 +19,12 @@ export default function Layout({ children }: LayoutProps) {
   }
 
   const navItems = [
+    { path: "/idea-of-the-day", label: "Idea of the Day", icon: Sparkles, public: true },
     { path: "/new-idea", label: "New Analysis", icon: Plus },
     { path: "/history", label: "History", icon: History },
+    { path: "/comparison", label: "Compare", icon: GitCompare },
+    { path: "/analytics", label: "Analytics", icon: BarChart3 },
+    { path: "/market-alerts", label: "Market Alerts", icon: Bell },
     ...(user?.role === 'ADMIN' ? [{ path: "/admin", label: "Admin", icon: LayoutGrid }] : []),
   ];
 
@@ -39,7 +43,12 @@ export default function Layout({ children }: LayoutProps) {
         <div className="flex-1 px-4 py-6 space-y-2">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.path;
+            const isActive = location.pathname === item.path || (item.path === "/idea-of-the-day" && location.pathname.startsWith("/idea-of-the-day"));
+
+            // Public items are always visible, protected items require auth
+            if (!item.public && !user) {
+              return null;
+            }
 
             // Disable New Analysis if no credits
             const isNewAnalysis = item.path === "/new-idea";

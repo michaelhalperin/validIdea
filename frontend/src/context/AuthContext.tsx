@@ -6,10 +6,10 @@ import type { User } from '../types';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   register: (email: string, password: string, name?: string) => Promise<void>;
   logout: () => void;
-  refreshUser: () => Promise<void>;
+  refreshUser: () => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,13 +18,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const refreshUser = async () => {
+  const refreshUser = async (): Promise<User | null> => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         setUser(null);
         setLoading(false);
-        return;
+        return null;
       }
 
       const response = await api.get('/auth/me');
@@ -33,9 +33,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       // If user is not verified and not OAuth, they should be on verify page
       // But don't redirect here - let ProtectedRoute handle it
+      return userData;
     } catch (error) {
       localStorage.removeItem('token');
       setUser(null);
+      return null;
     } finally {
       setLoading(false);
     }
@@ -45,10 +47,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     refreshUser();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<User> => {
     const response = await api.post('/auth/login', { email, password });
     localStorage.setItem('token', response.data.token);
-    await refreshUser();
+    const user = await refreshUser();
+    if (!user) {
+      throw new Error('Failed to fetch user data');
+    }
+    return user;
   };
 
   const register = async (email: string, password: string, name?: string) => {

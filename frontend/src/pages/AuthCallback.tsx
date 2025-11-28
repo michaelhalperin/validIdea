@@ -12,8 +12,13 @@ export default function AuthCallback() {
     const token = searchParams.get('token');
     if (token) {
       localStorage.setItem('token', token);
-      refreshUser().then(() => {
-        navigate('/history');
+      refreshUser().then((user) => {
+        // OAuth users are auto-verified, but check just in case
+        if (user && !user.isVerified && !user.googleId) {
+          navigate('/verify-email');
+        } else {
+          navigate('/history');
+        }
       });
     } else {
       navigate('/login?error=oauth_failed');

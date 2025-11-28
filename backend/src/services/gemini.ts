@@ -350,3 +350,142 @@ export async function regenerateSection(
     throw new Error(`Failed to regenerate ${section}: ${error}`);
   }
 }
+
+/**
+ * Generate chat response about an analysis
+ */
+export async function generateChatResponse(
+  analysis: any,
+  history: Array<{ role: string; content: string }>,
+  userMessage: string
+): Promise<string> {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-pro",
+    systemInstruction: `You are an AI assistant helping users understand their startup idea analysis. 
+    You have access to a complete analysis report. Answer questions clearly and concisely.
+    Reference specific metrics and data from the analysis when relevant.
+    If asked about something not in the analysis, say so clearly.`,
+    generationConfig: {
+      temperature: 0.7,
+    },
+  });
+
+  const idea = analysis.idea;
+  const analysisSummary = {
+    title: idea.title,
+    confidence: analysis.confidenceOverall,
+    opportunityScore: (analysis.opportunity as any)?.score,
+    marketSize: (analysis.marketSize as any)?.tamn_estimate_usd,
+    competitors: (analysis.competitors as any[])?.length || 0,
+    keyStrengths: (analysis.swot as any)?.strengths?.slice(0, 3) || [],
+    keyWeaknesses: (analysis.swot as any)?.weaknesses?.slice(0, 3) || [],
+  };
+
+  // Build conversation context
+  const context = `Analysis Context:
+${JSON.stringify(analysisSummary, null, 2)}
+
+Previous conversation:
+${history.map((h) => `${h.role}: ${h.content}`).join('\n')}
+
+User question: ${userMessage}`;
+
+  try {
+    const result = await model.generateContent(context);
+    return result.response.text();
+  } catch (error: any) {
+    throw new Error(`Failed to generate chat response: ${error.message}`);
+  }
+}
+
+/**
+ * Generate investor-ready report
+ */
+export async function generateInvestorReport(
+  idea: IdeaInput & { id: string },
+  analysis: any
+): Promise<any> {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-pro",
+    systemInstruction: `You are an expert at creating investor pitch decks and financial projections.
+    Create a comprehensive, investor-ready report based on the startup idea and analysis.
+    Be realistic and data-driven.`,
+    generationConfig: {
+      temperature: 0.3,
+    },
+  });
+
+  const prompt = `Generate an investor-ready report for this startup idea:
+
+Idea: ${idea.title}
+${idea.description}
+
+Analysis Summary:
+- Confidence Score: ${analysis.confidenceOverall}
+- Market Size: $${(analysis.marketSize as any)?.tamn_estimate_usd?.toLocaleString()}
+- Opportunity Score: ${(analysis.opportunity as any)?.score}
+- Key Strengths: ${(analysis.swot as any)?.strengths?.slice(0, 3).join(', ')}
+- Revenue Streams: ${(analysis.revenueStreams as any[])?.map((r: any) => r.model).join(', ')}
+
+Create a comprehensive investor report with:
+1. Executive Summary (2-3 paragraphs)
+2. Problem Statement (clear pain point)
+3. Solution (how this solves it)
+4. Market Opportunity (size, growth, trends)
+5. Business Model (revenue streams, pricing, unit economics)
+6. Traction (if any, or validation milestones)
+7. Competitive Advantage (unfair advantage)
+8. Team (ideal team composition)
+9. Financial Projections (3-year forecast with realistic assumptions)
+10. Funding Ask (amount, use of funds, milestones)
+11. Pitch Deck Outline (10-12 slides with titles and key content)
+
+Return as JSON with this structure:
+{
+  "executiveSummary": "...",
+  "problemStatement": "...",
+  "solution": "...",
+  "marketOpportunity": {
+    "size": number,
+    "growth": "...",
+    "trends": ["...", "..."]
+  },
+  "businessModel": {
+    "revenueStreams": ["...", "..."],
+    "pricing": "...",
+    "unitEconomics": "..."
+  },
+  "traction": "...",
+  "competitiveAdvantage": "...",
+  "team": "...",
+  "financialProjections": {
+    "year1": { "revenue": number, "expenses": number, "users": number },
+    "year2": { "revenue": number, "expenses": number, "users": number },
+    "year3": { "revenue": number, "expenses": number, "users": number }
+  },
+  "fundingAsk": {
+    "amount": number,
+    "useOfFunds": ["...", "..."],
+    "milestones": ["...", "..."]
+  },
+  "pitchDeck": {
+    "slides": [
+      { "title": "...", "content": "..." }
+    ]
+  }
+}`;
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    let text = response.text().trim();
+
+    if (text.startsWith("```")) {
+      text = text.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+    }
+
+    return JSON.parse(text);
+  } catch (error: any) {
+    throw new Error(`Failed to generate investor report: ${error.message}`);
+  }
+}

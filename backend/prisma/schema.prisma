@@ -11,105 +11,136 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  password      String?   // nullable for OAuth users
-  name          String?
-  image         String?
-  role          Role      @default(USER)
-  googleId      String?   @unique
-  credits       Int       @default(10) // Monthly credits
-  creditsUsed   Int       @default(0)
+  id              String   @id @default(cuid())
+  email           String   @unique
+  password        String? // nullable for OAuth users
+  name            String?
+  image           String?
+  role            Role     @default(USER)
+  googleId        String?  @unique
+  credits         Int      @default(10) // Monthly credits
+  creditsUsed     Int      @default(0)
   lastCreditReset DateTime @default(now())
   // Notification preferences
-  notifyEmail   Boolean   @default(true) // Analysis completion emails
-  notifyUpdates Boolean   @default(false) // Product updates
-  notifyMarketing Boolean @default(true) // Weekly digest
-  
+  notifyEmail     Boolean  @default(true) // Analysis completion emails
+  notifyUpdates   Boolean  @default(false) // Product updates
+  notifyMarketing Boolean  @default(true) // Weekly digest
+  webhookUrl      String? // For webhook integrations
+  apiKey          String?  @unique // API key for programmatic access
+
   // Reset Token
   resetToken        String?
   resetTokenExpires DateTime?
 
   // Email Verification
-  isVerified        Boolean   @default(false)
+  isVerified        Boolean @default(false)
   verificationToken String?
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  ideas         Idea[]
-  analyses      Analysis[]
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  ideas        Idea[]
+  analyses     Analysis[]
+  comparisons  Comparison[]
+  marketAlerts MarketAlert[]
+  chatMessages ChatMessage[]
+  checklistItems ChecklistItem[]
+  investorReports InvestorReport[]
 
   @@map("users")
 }
 
 model Idea {
-  id          String     @id @default(cuid())
-  title       String
-  oneLiner    String
-  description String     @db.Text
-  userId      String
-  status      IdeaStatus @default(DRAFT)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  attachments Attachment[]
-  analyses    Analysis[]
+  id           String        @id @default(cuid())
+  title        String
+  oneLiner     String
+  description  String        @db.Text
+  userId       String
+  status       IdeaStatus    @default(DRAFT)
+  tags         String[] // Tags for categorization
+  category     String? // Main category
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attachments  Attachment[]
+  analyses     Analysis[]
+  ideaOfTheDay IdeaOfTheDay?
+  marketAlerts MarketAlert[]
+  checklistItems ChecklistItem[]
+  investorReport InvestorReport?
 
   @@map("ideas")
 }
 
 model Attachment {
-  id          String   @id @default(cuid())
-  ideaId      String
-  type        AttachmentType
-  url         String
-  fileName    String?
-  fileSize    Int?
-  mimeType    String?
-  metadata    Json?    // For storing additional info (e.g., video duration, slide count)
-  createdAt   DateTime @default(now())
-  idea        Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  id        String         @id @default(cuid())
+  ideaId    String
+  type      AttachmentType
+  url       String
+  fileName  String?
+  fileSize  Int?
+  mimeType  String?
+  metadata  Json? // For storing additional info (e.g., video duration, slide count)
+  createdAt DateTime       @default(now())
+  idea      Idea           @relation(fields: [ideaId], references: [id], onDelete: Cascade)
 
   @@map("attachments")
 }
 
 model Analysis {
-  id              String   @id @default(cuid())
-  ideaId          String
-  userId          String
-  rawOutput       Json     // Store raw Gemini response
-  executiveSummary String?  @db.Text
-  marketSize      Json?    // {tamn_estimate_usd, reasoning, data_points}
-  competitors     Json?    // Array of competitor objects
-  swot            Json?    // {strengths, weaknesses, opportunities, threats}
+  id                   String   @id @default(cuid())
+  ideaId               String
+  userId               String
+  rawOutput            Json // Store raw Gemini response
+  executiveSummary     String?  @db.Text
+  marketSize           Json? // {tamn_estimate_usd, reasoning, data_points}
+  competitors          Json? // Array of competitor objects
+  swot                 Json? // {strengths, weaknesses, opportunities, threats}
   technicalFeasibility Json? // {stack, complexity_rating, estimated_dev_months}
-  costEstimate    Json?    // {dev_cost_usd, cogs_first_year_usd, marketing_first_year_usd, assumptions}
-  roadmap         Json?    // Array of phase objects
-  nextSteps       String?  @db.Text
-  investorPitch   Json?    // {one_liner, 60s_pitch}
-  confidenceOverall Int?   // 0-100
-  keywords        String[] // Array of strings
-  marketTrends    Json?    // Array of trend objects
-  deepResearch    Json?    // Array of research objects
-  userPersonas    Json?    // Array of persona objects
-  marketingChannels Json?  // Array of channel objects
-  revenueStreams  Json?    // Array of revenue objects
-  tokenUsage      Int?     // Track API usage
+  costEstimate         Json? // {dev_cost_usd, cogs_first_year_usd, marketing_first_year_usd, assumptions}
+  roadmap              Json? // Array of phase objects
+  nextSteps            String?  @db.Text
+  investorPitch        Json? // {one_liner, 60s_pitch}
+  confidenceOverall    Int? // 0-100
+  keywords             String[] // Array of strings
+  marketTrends         Json? // Array of trend objects
+  deepResearch         Json? // Array of research objects
+  userPersonas         Json? // Array of persona objects
+  marketingChannels    Json? // Array of channel objects
+  revenueStreams       Json? // Array of revenue objects
+  tokenUsage           Int? // Track API usage
 
   // New fields for enhanced analysis
-  opportunity     Json?    // { score: number, problem: string, feasibility: string, why_now: string, unfair_advantage: string }
-  businessFit     Json?    // { revenue_potential: string, execution_difficulty: string, go_to_market: string }
-  offerStructure  Json?    // { lead_magnet: string, frontend: string, core: string, backend: string, continuity: string }
-  categorization  Json?    // { type: string, market: string, target: string, main_competitor: string }
-  whyNow          String?  @db.Text // Specific "Why Now" narrative
-  signals         Json?    // { community: string, search_volume: string, market_gap: string }
+  opportunity    Json? // { score: number, problem: string, feasibility: string, why_now: string, unfair_advantage: string }
+  businessFit    Json? // { revenue_potential: string, execution_difficulty: string, go_to_market: string }
+  offerStructure Json? // { lead_magnet: string, frontend: string, core: string, backend: string, continuity: string }
+  categorization Json? // { type: string, market: string, target: string, main_competitor: string }
+  whyNow         String? @db.Text // Specific "Why Now" narrative
+  signals        Json? // { community: string, search_volume: string, market_gap: string }
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  idea            Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  idea         Idea          @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ideaOfTheDay IdeaOfTheDay?
+  chatMessages ChatMessage[]
 
   @@map("analyses")
+}
+
+model IdeaOfTheDay {
+  id          String   @id @default(cuid())
+  date        DateTime @unique @default(now()) // Date for which this is the idea of the day
+  ideaId      String   @unique
+  analysisId  String   @unique
+  title       String
+  oneLiner    String
+  description String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  idea        Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  analysis    Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  @@map("idea_of_the_day")
 }
 
 enum Role {
@@ -130,4 +161,88 @@ enum AttachmentType {
   SLIDE_LINK
   VIDEO_LINK
   OTHER
+}
+
+model Comparison {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String? // Optional name for the comparison
+  ideaIds   String[] // Array of idea IDs being compared
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("comparisons")
+}
+
+model MarketAlert {
+  id              String    @id @default(cuid())
+  userId          String
+  ideaId          String? // Optional - can be general market alert
+  alertType       AlertType
+  keywords        String[] // Keywords to monitor
+  competitorNames String[] // Competitor names to track
+  isActive        Boolean   @default(true)
+  lastTriggered   DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  idea            Idea?     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  @@map("market_alerts")
+}
+
+model ChatMessage {
+  id         String   @id @default(cuid())
+  userId     String
+  analysisId String // Which analysis the chat is about
+  role       ChatRole // 'user' or 'assistant'
+  content    String   @db.Text
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  analysis   Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+}
+
+enum AlertType {
+  COMPETITOR_LAUNCH
+  MARKET_SIZE_CHANGE
+  SIMILAR_IDEA_LAUNCH
+  INDUSTRY_NEWS
+  CUSTOM
+}
+
+enum ChatRole {
+  USER
+  ASSISTANT
+}
+
+model InvestorReport {
+  id          String   @id @default(cuid())
+  ideaId      String   @unique
+  userId      String
+  report      Json     // Store the full investor report JSON
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  idea        Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("investor_reports")
+}
+
+model ChecklistItem {
+  id          String   @id @default(cuid())
+  ideaId      String
+  userId      String
+  itemId      String // The ID from the generated checklist (e.g., 'problem-1')
+  completed   Boolean  @default(false)
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  idea        Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([ideaId, userId, itemId])
+  @@map("checklist_items")
 }

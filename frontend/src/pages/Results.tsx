@@ -15,7 +15,11 @@ import {
   Layers,
   Menu,
   X,
-  Terminal
+  Terminal,
+  MessageSquare,
+  CheckSquare,
+  FileText,
+  MoreVertical
 } from 'lucide-react';
 import api from '../utils/api';
 import { useToast } from '../context/ToastContext';
@@ -26,8 +30,19 @@ import ExecutionAnalysis from '../components/analysis/ExecutionAnalysis';
 import DevelopmentPrompt from '../components/analysis/DevelopmentPrompt';
 import ScoreGauge from '../components/analysis/ScoreGauge';
 import OpportunityOverview from '../components/analysis/OpportunityOverview';
+import ChatInterface from '../components/analysis/ChatInterface';
+import ValidationChecklist from '../components/analysis/ValidationChecklist';
+import Recommendations from '../components/analysis/Recommendations';
 
-type Tab = 'overview' | 'market' | 'strategy' | 'execution' | 'development';
+type Tab =
+  | 'overview'
+  | 'market'
+  | 'strategy'
+  | 'execution'
+  | 'development'
+  | 'chat'
+  | 'checklist'
+  | 'recommendations';
 
 export default function Results() {
   const { id } = useParams<{ id: string }>();
@@ -130,6 +145,9 @@ export default function Results() {
     { id: 'strategy', label: 'Strategy', icon: Crosshair },
     { id: 'execution', label: 'Execution', icon: Layers },
     { id: 'development', label: 'Build It', icon: Terminal },
+    { id: 'chat', label: 'AI Chat', icon: MessageSquare },
+    { id: 'checklist', label: 'Validation', icon: CheckSquare },
+    { id: 'recommendations', label: 'Recommendations', icon: Sparkles },
   ];
 
   return (
@@ -147,40 +165,45 @@ export default function Results() {
         fixed lg:relative inset-y-0 left-0 z-40 w-72 bg-[#080808] border-r border-white/5 transform transition-transform duration-300 ease-in-out
         ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <div className="p-6 h-full flex flex-col">
-          <div className="flex items-center gap-2 mb-8 cursor-pointer group" onClick={() => navigate('/history')}>
-            <div className="p-1.5 rounded-md bg-white/5 group-hover:bg-white/10 transition-colors">
-              <ArrowLeft className="w-4 h-4 text-gray-400" />
+        <div className="h-full flex flex-col">
+          {/* Fixed Header */}
+          <div className="p-6 pb-4 flex-shrink-0">
+            <div className="flex items-center gap-2 mb-6 cursor-pointer group" onClick={() => navigate('/history')}>
+              <div className="p-1.5 rounded-md bg-white/5 group-hover:bg-white/10 transition-colors">
+                <ArrowLeft className="w-4 h-4 text-gray-400" />
+              </div>
+              <span className="text-sm font-medium text-gray-400 group-hover:text-white transition-colors">Back to Hub</span>
             </div>
-            <span className="text-sm font-medium text-gray-400 group-hover:text-white transition-colors">Back to Hub</span>
+
+            <div className="mb-6">
+              <h1 className="text-xl font-bold leading-tight mb-2 line-clamp-2">{ideaData.title}</h1>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                <span className="text-xs font-mono text-emerald-500 tracking-wider">ANALYSIS COMPLETE</span>
+              </div>
+            </div>
           </div>
 
-          <div className="mb-8">
-            <h1 className="text-xl font-bold leading-tight mb-2 line-clamp-2">{ideaData.title}</h1>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-              <span className="text-xs font-mono text-emerald-500 tracking-wider">ANALYSIS COMPLETE</span>
-            </div>
-          </div>
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto px-6 pb-6">
+            <nav className="space-y-1 mb-6">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => { setActiveTab(item.id as Tab); setMobileMenuOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+                    activeTab === item.id 
+                      ? 'bg-[#6366F1] text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]' 
+                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  <item.icon className={`w-5 h-5 ${activeTab === item.id ? 'text-white' : 'text-gray-500 group-hover:text-white'}`} />
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              ))}
+            </nav>
 
-          <nav className="space-y-1 flex-1">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => { setActiveTab(item.id as Tab); setMobileMenuOpen(false); }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
-                  activeTab === item.id 
-                    ? 'bg-[#6366F1] text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]' 
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                }`}
-              >
-                <item.icon className={`w-5 h-5 ${activeTab === item.id ? 'text-white' : 'text-gray-500 group-hover:text-white'}`} />
-                <span className="font-medium">{item.label}</span>
-              </button>
-            ))}
-          </nav>
-
-          <div className="pt-6 border-t border-white/5 space-y-4">
+            <div className="pt-6 border-t border-white/5 space-y-4">
             {analysis?.confidenceOverall && (
               <div className="bg-white/5 rounded-2xl p-4 text-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-b from-[#6366F1]/10 to-transparent" />
@@ -190,33 +213,92 @@ export default function Results() {
                 </div>
               </div>
             )}
-            <button 
-              onClick={async () => {
-                if (analysis?.id) {
-                  try {
-                    const response = await api.get(`/export/${analysis.id}/pdf`, {
-                      responseType: 'blob',
-                    });
-                    const blob = new Blob([response.data], { type: 'application/pdf' });
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `analysis-${ideaData?.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${analysis.id}.pdf`;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(a);
-                  } catch (err) {
-                    console.error('Export error:', err);
-                    toast.error('Failed to export PDF. Please try again.');
+            {/* Export Buttons */}
+            <div className="space-y-2">
+              <button 
+                onClick={async () => {
+                  if (analysis?.id) {
+                    try {
+                      const response = await api.get(`/export/${analysis.id}/pdf`, {
+                        responseType: 'blob',
+                      });
+                      const blob = new Blob([response.data], { type: 'application/pdf' });
+                      const url = window.URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `analysis-${ideaData?.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${analysis.id}.pdf`;
+                      document.body.appendChild(a);
+                      a.click();
+                      window.URL.revokeObjectURL(url);
+                      document.body.removeChild(a);
+                      toast.success('PDF exported!');
+                    } catch (err) {
+                      console.error('Export error:', err);
+                      toast.error('Failed to export PDF. Please try again.');
+                    }
                   }
-                }
-              }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-sm font-medium text-gray-300 hover:text-white cursor-pointer"
-              style={{ cursor: 'pointer' }}
-            >
-              <Download className="w-4 h-4" /> Export PDF Report
-            </button>
+                }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-sm font-medium text-gray-300 hover:text-white"
+              >
+                <Download className="w-4 h-4" /> Export PDF
+              </button>
+
+              <div className="relative group">
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-sm font-medium text-gray-300 hover:text-white">
+                  <MoreVertical className="w-4 h-4" /> More Exports
+                </button>
+                <div className="absolute bottom-full left-0 mb-2 w-full bg-[#1A1A1A] border border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+                  <div className="py-2">
+                    {[
+                      { label: 'Notion (Markdown)', format: 'notion' },
+                      { label: 'CSV', format: 'csv' },
+                      { label: 'JSON', format: 'json' },
+                      { label: 'Google Sheets', format: 'google-sheets' },
+                      { label: 'Airtable', format: 'airtable' },
+                    ].map(({ label, format }) => (
+                      <button
+                        key={format}
+                        onClick={async () => {
+                          if (analysis?.id) {
+                            try {
+                              const response = await api.get(`/exports/${analysis.id}/${format}`, {
+                                responseType: 'blob',
+                              });
+                              const blob = new Blob([response.data], {
+                                type: format === 'json' ? 'application/json' : 'text/plain',
+                              });
+                              const url = window.URL.createObjectURL(blob);
+                              const a = document.createElement('a');
+                              a.href = url;
+                              const ext = format === 'json' ? 'json' : format === 'notion' ? 'md' : 'csv';
+                              a.download = `analysis-${ideaData?.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${analysis.id}.${ext}`;
+                              document.body.appendChild(a);
+                              a.click();
+                              window.URL.revokeObjectURL(url);
+                              document.body.removeChild(a);
+                              toast.success(`${label} exported!`);
+                            } catch (err) {
+                              toast.error(`Failed to export ${label}`);
+                            }
+                          }
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-white/5"
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => navigate(`/investor-report/${id}`)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#6366F1]/10 hover:bg-[#6366F1]/20 border border-[#6366F1]/20 transition-all text-sm font-medium text-[#6366F1] hover:text-[#8B5CF6]"
+              >
+                <FileText className="w-4 h-4" /> Investor Report
+              </button>
+            </div>
+          </div>
           </div>
         </div>
       </aside>
@@ -282,6 +364,24 @@ export default function Results() {
             {activeTab === 'development' && analysis && ideaData && (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <DevelopmentPrompt analysis={analysis} idea={ideaData} />
+              </div>
+            )}
+
+            {activeTab === 'chat' && analysis && (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <ChatInterface analysisId={analysis.id} />
+              </div>
+            )}
+
+            {activeTab === 'checklist' && ideaData && (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <ValidationChecklist ideaId={ideaData.id} />
+              </div>
+            )}
+
+            {activeTab === 'recommendations' && id && (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <Recommendations ideaId={id} />
               </div>
             )}
           </div>

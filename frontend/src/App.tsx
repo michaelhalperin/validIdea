@@ -19,6 +19,11 @@ import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
+import IdeaOfTheDayPage from "./pages/IdeaOfTheDayPage";
+import Comparison from "./pages/Comparison";
+import Analytics from "./pages/Analytics";
+import InvestorReport from "./pages/InvestorReport";
+import MarketAlerts from "./pages/MarketAlerts";
 import Layout from "./components/Layout";
 
 const queryClient = new QueryClient();
@@ -43,6 +48,14 @@ function AppRoutes() {
       <Route path="/contact" element={<Contact />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
+      <Route
+        path="/idea-of-the-day/:id?"
+        element={
+          <Layout>
+            <IdeaOfTheDayPage />
+          </Layout>
+        }
+      />
       <Route path="/auth/callback" element={<AuthCallback />} />
 
       {/* Protected Routes */}
@@ -92,6 +105,46 @@ function AppRoutes() {
           <ProtectedRoute>
             <Layout>
               <Profile />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/comparison"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Comparison />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Analytics />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/investor-report/:id"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <InvestorReport />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/market-alerts"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <MarketAlerts />
             </Layout>
           </ProtectedRoute>
         }

@@ -28,8 +28,13 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      await login(email, password);
-      navigate("/history");
+      const user = await login(email, password);
+      // Check verification status from the returned user data
+      if (!user.isVerified && !user.googleId) {
+        navigate("/verify-email");
+      } else {
+        navigate("/history");
+      }
     } catch (err: any) {
       setError(err.response?.data?.error || "Login failed");
       if (err.response?.data?.error?.includes("verify your email")) {

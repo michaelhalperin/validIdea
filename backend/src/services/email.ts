@@ -201,3 +201,33 @@ export async function sendContactEmail(
     throw error;
   }
 }
+
+export async function sendMarketAlertEmail(
+  to: string,
+  ideaTitle: string,
+  message: string,
+  data?: any
+) {
+  try {
+    await resend.emails.send({
+      from: "ValidIdea <noreply@valididea.com>",
+      to,
+      subject: `Market Alert: ${ideaTitle}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #6366F1;">Market Alert Triggered</h2>
+          <p><strong>Idea:</strong> ${ideaTitle}</p>
+          <p>${message}</p>
+          ${data ? `<pre style="background: #f5f5f5; padding: 10px; border-radius: 4px;">${JSON.stringify(data, null, 2)}</pre>` : ''}
+          <p style="margin-top: 20px; color: #666; font-size: 12px;">
+            You can manage your alerts in your ValidIdea dashboard.
+          </p>
+        </div>
+      `,
+    });
+    console.log(`Market alert email sent to ${to}`);
+  } catch (error) {
+    console.error("Failed to send market alert email:", error);
+    throw error;
+  }
+}
