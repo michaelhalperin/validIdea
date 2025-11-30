@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 100" fill="none">
+  <!-- Outer Hexagon -->
+  <path d="M45 5 L80 25 L80 65 L45 85 L10 65 L10 25 Z" stroke="url(#grad1)" stroke-width="4" fill="rgba(99, 102, 241, 0.1)"/>
+  
+  <!-- Inner Elements -->
+  <path d="M45 25 L45 65" stroke="url(#grad2)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M30 35 L60 35" stroke="url(#grad2)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M30 55 L60 55" stroke="url(#grad2)" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Sparkle Accent -->
+  <path d="M70 15 L73 8 L76 15 L83 18 L76 21 L73 28 L70 21 L63 18 Z" fill="#F472B6"/>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#EC4899" />
+    </linearGradient>
+  </defs>
+</svg>
+
