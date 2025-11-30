@@ -36,35 +36,35 @@ model User {
   isVerified        Boolean @default(false)
   verificationToken String?
 
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  ideas        Idea[]
-  analyses     Analysis[]
-  comparisons  Comparison[]
-  marketAlerts MarketAlert[]
-  chatMessages ChatMessage[]
-  checklistItems ChecklistItem[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  ideas           Idea[]
+  analyses        Analysis[]
+  comparisons     Comparison[]
+  marketAlerts    MarketAlert[]
+  chatMessages    ChatMessage[]
+  checklistItems  ChecklistItem[]
   investorReports InvestorReport[]
 
   @@map("users")
 }
 
 model Idea {
-  id           String        @id @default(cuid())
-  title        String
-  oneLiner     String
-  description  String        @db.Text
-  userId       String
-  status       IdeaStatus    @default(DRAFT)
-  tags         String[] // Tags for categorization
-  category     String? // Main category
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  attachments  Attachment[]
-  analyses     Analysis[]
-  ideaOfTheDay IdeaOfTheDay?
-  marketAlerts MarketAlert[]
+  id             String          @id @default(cuid())
+  title          String
+  oneLiner       String
+  description    String          @db.Text
+  userId         String
+  status         IdeaStatus      @default(DRAFT)
+  tags           String[] // Tags for categorization
+  category       String? // Main category
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attachments    Attachment[]
+  analyses       Analysis[]
+  ideaOfTheDay   IdeaOfTheDay?
+  marketAlerts   MarketAlert[]
   checklistItems ChecklistItem[]
   investorReport InvestorReport?
 
@@ -116,6 +116,22 @@ model Analysis {
   categorization Json? // { type: string, market: string, target: string, main_competitor: string }
   whyNow         String? @db.Text // Specific "Why Now" narrative
   signals        Json? // { community: string, search_volume: string, market_gap: string }
+
+  // Additional analysis fields
+  unitEconomics              Json? // { estimated_cac_usd, estimated_ltv_usd, ltv_cac_ratio, payback_period_months, contribution_margin_percent, break_even_customers, assumptions }
+  riskAssessment             Json? // { technical_risks, market_risks, financial_risks, regulatory_risks, operational_risks }
+  competitiveDifferentiation Json? // { unique_value_props, moat_strength, moat_type, defensibility_score, competitive_response_likelihood }
+  pricingAnalysis            Json? // { recommended_pricing_model, price_sensitivity, competitive_pricing_comparison, pricing_strategy_rationale, freemium_viability, discount_strategy }
+  acquisitionFunnel          Json? // { awareness_channels, consideration_touchpoints, conversion_strategies, estimated_conversion_rates, key_drop_off_points, optimization_opportunities }
+  regulatoryAnalysis         Json? // { applicable_regulations, compliance_requirements, licensing_needs, data_privacy_considerations, industry_specific_requirements, estimated_compliance_cost_usd }
+  partnershipOpportunities   Json? // { strategic_partners, integration_opportunities, distribution_partners }
+  teamRequirements           Json? // { critical_roles, team_size_by_phase, skill_gaps }
+  scalabilityAnalysis        Json? // { technical_bottlenecks, infrastructure_requirements, scaling_costs, operational_scaling_challenges, scalability_score }
+  retentionAnalysis          Json? // { predicted_churn_rate_percent, retention_strategies, upsell_opportunities, cross_sell_opportunities, customer_success_requirements, estimated_ltv_improvement_potential }
+  technologyAnalysis         Json? // { stack_justification, technology_risks, vendor_lock_in_concerns, migration_difficulty, future_proofing_score, open_source_alternatives }
+  timingAnalysis             Json? // { market_readiness, seasonal_considerations, launch_window_recommendation, market_cycle_position, timing_risks }
+  exitAnalysis               Json? // { potential_acquirers, ipo_feasibility, estimated_exit_timeline_years, exit_valuation_range, strategic_vs_financial_buyer }
+  customerJourney            Json? // { awareness_stage, consideration_stage, purchase_stage, retention_stage }
 
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -219,29 +235,29 @@ enum ChatRole {
 }
 
 model InvestorReport {
-  id          String   @id @default(cuid())
-  ideaId      String   @unique
-  userId      String
-  report      Json     // Store the full investor report JSON
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  idea        Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  ideaId    String   @unique
+  userId    String
+  report    Json // Store the full investor report JSON
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  idea      Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("investor_reports")
 }
 
 model ChecklistItem {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   ideaId      String
   userId      String
   itemId      String // The ID from the generated checklist (e.g., 'problem-1')
-  completed   Boolean  @default(false)
+  completed   Boolean   @default(false)
   completedAt DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  idea        Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  idea        Idea      @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([ideaId, userId, itemId])
   @@map("checklist_items")

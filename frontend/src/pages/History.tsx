@@ -5,21 +5,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
   Plus,
-  Play,
   Eye,
   Clock,
   FileText,
   Trash2,
   AlertTriangle,
+  Loader2,
+  Sparkles,
 } from "lucide-react";
 import api from "../utils/api";
+import { useToast } from "../context/ToastContext";
+import { useAuth } from "../context/AuthContext";
 import type { Idea } from "../types";
 
 export default function History() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const toast = useToast();
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [runningId, setRunningId] = useState<string | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["ideas"],
@@ -36,6 +42,30 @@ export default function History() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ideas"] });
       setDeleteId(null);
+    },
+  });
+
+  const runAnalysisMutation = useMutation({
+    mutationFn: async (ideaId: string) => {
+      // Check credits before running
+      if (user && user.credits <= 0) {
+        throw new Error("Daily limit reached. Credits will reset at midnight.");
+      }
+      await api.post(`/ideas/${ideaId}/generate`);
+    },
+    onSuccess: (_, ideaId) => {
+      queryClient.invalidateQueries({ queryKey: ["ideas"] });
+      setRunningId(null);
+      toast.success("Analysis started! Redirecting...");
+      navigate(`/results/${ideaId}`);
+    },
+    onError: (error: any) => {
+      setRunningId(null);
+      toast.error(
+        error?.response?.data?.error ||
+          error?.message ||
+          "Failed to run analysis"
+      );
     },
   });
 
@@ -224,18 +254,26 @@ export default function History() {
                 </button>
                 {idea.status === "DRAFT" && (
                   <button
-                    onClick={async () => {
-                      try {
-                        await api.post(`/ideas/${idea.id}/generate`);
-                        navigate(`/results/${idea.id}`);
-                      } catch (err) {
-                        console.error(err);
-                      }
+                    onClick={() => {
+                      setRunningId(idea.id);
+                      runAnalysisMutation.mutate(idea.id);
                     }}
-                    className="flex-1 md:flex-none btn-primary py-2 px-4 text-sm flex items-center justify-center gap-2"
+                    disabled={
+                      runAnalysisMutation.isPending && runningId === idea.id
+                    }
+                    className="flex-1 md:flex-none btn-primary py-2 px-4 text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Play className="w-4 h-4" />
-                    Run
+                    {runAnalysisMutation.isPending && runningId === idea.id ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Running...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        Run Analysis
+                      </>
+                    )}
                   </button>
                 )}
                 <button

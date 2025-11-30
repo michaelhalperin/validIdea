@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -34,6 +34,10 @@ import OpportunityOverview from "../components/analysis/OpportunityOverview";
 import ChatInterface from "../components/analysis/ChatInterface";
 import ValidationChecklist from "../components/analysis/ValidationChecklist";
 import Recommendations from "../components/analysis/Recommendations";
+import UnitEconomics from "../components/analysis/UnitEconomics";
+import RiskAssessment from "../components/analysis/RiskAssessment";
+import CompetitiveDifferentiation from "../components/analysis/CompetitiveDifferentiation";
+import PricingAnalysis from "../components/analysis/PricingAnalysis";
 
 type Tab =
   | "overview"
@@ -53,6 +57,7 @@ export default function Results() {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [showRaw, setShowRaw] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const mainContentRef = useRef<HTMLElement>(null);
 
   const {
     data: ideaData,
@@ -194,7 +199,7 @@ export default function Results() {
 
   if (ideaData.status === "FAILED") {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-center px-4 bg-[#030303]">
+      <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
         <div className="w-24 h-24 mb-6 rounded-full bg-red-500/10 flex items-center justify-center ring-1 ring-red-500/20">
           <AlertTriangle className="w-10 h-10 text-red-500" />
         </div>
@@ -219,7 +224,7 @@ export default function Results() {
 
   if (ideaData.status === "DRAFT") {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-center px-4 bg-[#030303]">
+      <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
         <div className="w-24 h-24 mb-6 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
           <Play className="w-10 h-10 text-white ml-1" />
         </div>
@@ -309,6 +314,11 @@ export default function Results() {
                   onClick={() => {
                     setActiveTab(item.id as Tab);
                     setMobileMenuOpen(false);
+                    // Scroll main content to top when tab changes
+                    mainContentRef.current?.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
                     activeTab === item.id
@@ -451,7 +461,10 @@ export default function Results() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto relative scroll-smooth">
+      <main
+        ref={mainContentRef}
+        className="flex-1 overflow-y-auto relative scroll-smooth"
+      >
         {/* Background Ambient Gradients */}
         <div className="fixed inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#6366F1]/5 rounded-full blur-[100px]" />
@@ -499,14 +512,26 @@ export default function Results() {
             )}
 
             {activeTab === "market" && analysis && (
-              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
                 <MarketAnalysis analysis={analysis} />
+                {analysis.competitiveDifferentiation && (
+                  <CompetitiveDifferentiation analysis={analysis} />
+                )}
               </div>
             )}
 
             {activeTab === "strategy" && analysis && (
-              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
                 <StrategyAnalysis analysis={analysis} />
+                {analysis.unitEconomics && (
+                  <UnitEconomics analysis={analysis} />
+                )}
+                {analysis.pricingAnalysis && (
+                  <PricingAnalysis analysis={analysis} />
+                )}
+                {analysis.riskAssessment && (
+                  <RiskAssessment analysis={analysis} />
+                )}
               </div>
             )}
 

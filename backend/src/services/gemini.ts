@@ -38,8 +38,12 @@ interface AnalysisOutput {
   executive_summary: string;
   market_size: {
     tamn_estimate_usd: number;
+    sam_estimate_usd?: number;
+    som_estimate_usd?: number;
     reasoning: string;
     data_points: string[];
+    growth_rate_cagr?: number;
+    market_maturity?: "Emerging" | "Growing" | "Mature" | "Declining";
   };
   top_competitors: Array<{
     name: string;
@@ -133,6 +137,176 @@ interface AnalysisOutput {
     search_trends: string;
     market_gap: string;
   };
+  unit_economics?: {
+    estimated_cac_usd: number;
+    estimated_ltv_usd: number;
+    ltv_cac_ratio: number;
+    payback_period_months: number;
+    contribution_margin_percent: number;
+    break_even_customers: number;
+    assumptions: string[];
+  };
+  risk_assessment?: {
+    technical_risks: Array<{
+      risk: string;
+      probability: "Low" | "Medium" | "High";
+      impact: "Low" | "Medium" | "High";
+      mitigation: string;
+    }>;
+    market_risks: Array<{
+      risk: string;
+      probability: "Low" | "Medium" | "High";
+      impact: "Low" | "Medium" | "High";
+      mitigation: string;
+    }>;
+    financial_risks: Array<{
+      risk: string;
+      probability: "Low" | "Medium" | "High";
+      impact: "Low" | "Medium" | "High";
+      mitigation: string;
+    }>;
+    regulatory_risks: Array<{
+      risk: string;
+      probability: "Low" | "Medium" | "High";
+      impact: "Low" | "Medium" | "High";
+      mitigation: string;
+    }>;
+    operational_risks: Array<{
+      risk: string;
+      probability: "Low" | "Medium" | "High";
+      impact: "Low" | "Medium" | "High";
+      mitigation: string;
+    }>;
+  };
+  competitive_differentiation?: {
+    unique_value_props: string[];
+    moat_strength: "Weak" | "Moderate" | "Strong";
+    moat_type: "Network Effects" | "Switching Costs" | "Brand" | "Technology" | "Data" | "None";
+    defensibility_score: number;
+    competitive_response_likelihood: "Low" | "Medium" | "High";
+  };
+  pricing_analysis?: {
+    recommended_pricing_model: string;
+    price_sensitivity: "Low" | "Medium" | "High";
+    competitive_pricing_comparison: Array<{
+      competitor: string;
+      price: string;
+      our_advantage: string;
+    }>;
+    pricing_strategy_rationale: string;
+    freemium_viability: "Yes" | "No" | "Maybe";
+    discount_strategy: string;
+  };
+  acquisition_funnel?: {
+    awareness_channels: string[];
+    consideration_touchpoints: string[];
+    conversion_strategies: string[];
+    estimated_conversion_rates: {
+      awareness_to_consideration: number;
+      consideration_to_trial: number;
+      trial_to_paid: number;
+    };
+    key_drop_off_points: string[];
+    optimization_opportunities: string[];
+  };
+  regulatory_analysis?: {
+    applicable_regulations: string[];
+    compliance_requirements: string[];
+    licensing_needs: string[];
+    data_privacy_considerations: string[];
+    industry_specific_requirements: string[];
+    estimated_compliance_cost_usd: number;
+  };
+  partnership_opportunities?: {
+    strategic_partners: Array<{
+      type: string;
+      description: string;
+      value_proposition: string;
+    }>;
+    integration_opportunities: string[];
+    distribution_partners: string[];
+  };
+  team_requirements?: {
+    critical_roles: Array<{
+      role: string;
+      priority: "Critical" | "Important" | "Nice to have";
+      skill_requirements: string[];
+      hiring_difficulty: "Easy" | "Medium" | "Hard";
+      estimated_salary_usd: number;
+    }>;
+    team_size_by_phase: {
+      mvp: number;
+      launch: number;
+      scale: number;
+    };
+    skill_gaps: string[];
+  };
+  scalability_analysis?: {
+    technical_bottlenecks: string[];
+    infrastructure_requirements: string[];
+    scaling_costs: {
+      per_1000_users_usd: number;
+      per_10000_users_usd: number;
+    };
+    operational_scaling_challenges: string[];
+    scalability_score: number;
+  };
+  retention_analysis?: {
+    predicted_churn_rate_percent: number;
+    retention_strategies: string[];
+    upsell_opportunities: string[];
+    cross_sell_opportunities: string[];
+    customer_success_requirements: string[];
+    estimated_ltv_improvement_potential: string;
+  };
+  technology_analysis?: {
+    stack_justification: string;
+    technology_risks: string[];
+    vendor_lock_in_concerns: string[];
+    migration_difficulty: "Low" | "Medium" | "High";
+    future_proofing_score: number;
+    open_source_alternatives: string[];
+  };
+  timing_analysis?: {
+    market_readiness: "Too Early" | "Perfect Timing" | "Too Late";
+    seasonal_considerations: string[];
+    launch_window_recommendation: string;
+    market_cycle_position: "Early" | "Growth" | "Mature" | "Decline";
+    timing_risks: string[];
+  };
+  exit_analysis?: {
+    potential_acquirers: Array<{
+      company: string;
+      rationale: string;
+      fit_score: number;
+    }>;
+    ipo_feasibility: "Low" | "Medium" | "High";
+    estimated_exit_timeline_years: number;
+    exit_valuation_range: string;
+    strategic_vs_financial_buyer: "Strategic" | "Financial" | "Both";
+  };
+  customer_journey?: {
+    awareness_stage: {
+      touchpoints: string[];
+      pain_points: string[];
+      content_needs: string[];
+    };
+    consideration_stage: {
+      touchpoints: string[];
+      pain_points: string[];
+      content_needs: string[];
+    };
+    purchase_stage: {
+      touchpoints: string[];
+      pain_points: string[];
+      content_needs: string[];
+    };
+    retention_stage: {
+      touchpoints: string[];
+      pain_points: string[];
+      content_needs: string[];
+    };
+  };
 }
 
 export async function generateAnalysis(
@@ -158,8 +332,12 @@ Return JSON with:
 - executive_summary (string): A high-impact overview of the opportunity and critical verdict.
 - market_size: {
     tamn_estimate_usd (number), 
+    sam_estimate_usd (number - optional): "Serviceable Available Market",
+    som_estimate_usd (number - optional): "Serviceable Obtainable Market",
     reasoning (string): "Detailed bottom-up calculation logic", 
-    data_points (string[]): ["Source A", "Source B"]
+    data_points (string[]): ["Source A", "Source B"],
+    growth_rate_cagr (number - optional): "Market growth rate percentage",
+    market_maturity ("Emerging" | "Growing" | "Mature" | "Declining" - optional)
   }
 - top_competitors: [{
     name (string), 
@@ -216,7 +394,7 @@ Return JSON with:
     effectiveness ("High" | "Medium" | "Low"),
     strategy (string): "Tactical approach for this channel"
   }]
-  - revenue_streams: [{
+- revenue_streams: [{
     model (string): "Revenue model type (e.g. Subscription)",
     pricing_strategy (string): "Specific pricing tactics",
     estimated_ltv_usd (number - optional)
@@ -252,6 +430,110 @@ Return JSON with:
     community_engagement (string): "Predicted reception on platforms like Reddit/ProductHunt",
     search_trends (string): "Likely search behavior/keywords volume",
     market_gap (string): "The specific hole in the market this fills"
+  }
+- unit_economics (optional): {
+    estimated_cac_usd (number): "Customer Acquisition Cost",
+    estimated_ltv_usd (number): "Lifetime Value",
+    ltv_cac_ratio (number): "Should be > 3 for healthy business",
+    payback_period_months (number): "Time to recover CAC",
+    contribution_margin_percent (number): "Profit margin per customer",
+    break_even_customers (number): "Customers needed to break even",
+    assumptions (string[]): ["Assumption 1", "Assumption 2"]
+  }
+- risk_assessment (optional): {
+    technical_risks: [{risk (string), probability ("Low" | "Medium" | "High"), impact ("Low" | "Medium" | "High"), mitigation (string)}],
+    market_risks: [{risk (string), probability, impact, mitigation}],
+    financial_risks: [{risk (string), probability, impact, mitigation}],
+    regulatory_risks: [{risk (string), probability, impact, mitigation}],
+    operational_risks: [{risk (string), probability, impact, mitigation}]
+  }
+- competitive_differentiation (optional): {
+    unique_value_props (string[]): "What makes this different",
+    moat_strength ("Weak" | "Moderate" | "Strong"),
+    moat_type ("Network Effects" | "Switching Costs" | "Brand" | "Technology" | "Data" | "None"),
+    defensibility_score (number 0-100),
+    competitive_response_likelihood ("Low" | "Medium" | "High")
+  }
+- pricing_analysis (optional): {
+    recommended_pricing_model (string),
+    price_sensitivity ("Low" | "Medium" | "High"),
+    competitive_pricing_comparison: [{competitor (string), price (string), our_advantage (string)}],
+    pricing_strategy_rationale (string),
+    freemium_viability ("Yes" | "No" | "Maybe"),
+    discount_strategy (string)
+  }
+- acquisition_funnel (optional): {
+    awareness_channels (string[]),
+    consideration_touchpoints (string[]),
+    conversion_strategies (string[]),
+    estimated_conversion_rates: {
+      awareness_to_consideration (number): "percentage",
+      consideration_to_trial (number),
+      trial_to_paid (number)
+    },
+    key_drop_off_points (string[]),
+    optimization_opportunities (string[])
+  }
+- regulatory_analysis (optional): {
+    applicable_regulations (string[]): "GDPR, HIPAA, etc.",
+    compliance_requirements (string[]),
+    licensing_needs (string[]),
+    data_privacy_considerations (string[]),
+    industry_specific_requirements (string[]),
+    estimated_compliance_cost_usd (number)
+  }
+- partnership_opportunities (optional): {
+    strategic_partners: [{type (string): "Distribution/Integration/Technology", description (string), value_proposition (string)}],
+    integration_opportunities (string[]),
+    distribution_partners (string[])
+  }
+- team_requirements (optional): {
+    critical_roles: [{role (string), priority ("Critical" | "Important" | "Nice to have"), skill_requirements (string[]), hiring_difficulty ("Easy" | "Medium" | "Hard"), estimated_salary_usd (number)}],
+    team_size_by_phase: {mvp (number), launch (number), scale (number)},
+    skill_gaps (string[])
+  }
+- scalability_analysis (optional): {
+    technical_bottlenecks (string[]),
+    infrastructure_requirements (string[]),
+    scaling_costs: {per_1000_users_usd (number), per_10000_users_usd (number)},
+    operational_scaling_challenges (string[]),
+    scalability_score (number 0-100)
+  }
+- retention_analysis (optional): {
+    predicted_churn_rate_percent (number),
+    retention_strategies (string[]),
+    upsell_opportunities (string[]),
+    cross_sell_opportunities (string[]),
+    customer_success_requirements (string[]),
+    estimated_ltv_improvement_potential (string)
+  }
+- technology_analysis (optional): {
+    stack_justification (string),
+    technology_risks (string[]),
+    vendor_lock_in_concerns (string[]),
+    migration_difficulty ("Low" | "Medium" | "High"),
+    future_proofing_score (number 0-100),
+    open_source_alternatives (string[])
+  }
+- timing_analysis (optional): {
+    market_readiness ("Too Early" | "Perfect Timing" | "Too Late"),
+    seasonal_considerations (string[]),
+    launch_window_recommendation (string),
+    market_cycle_position ("Early" | "Growth" | "Mature" | "Decline"),
+    timing_risks (string[])
+  }
+- exit_analysis (optional): {
+    potential_acquirers: [{company (string), rationale (string), fit_score (number 0-100)}],
+    ipo_feasibility ("Low" | "Medium" | "High"),
+    estimated_exit_timeline_years (number),
+    exit_valuation_range (string),
+    strategic_vs_financial_buyer ("Strategic" | "Financial" | "Both")
+  }
+- customer_journey (optional): {
+    awareness_stage: {touchpoints (string[]), pain_points (string[]), content_needs (string[])},
+    consideration_stage: {touchpoints (string[]), pain_points (string[]), content_needs (string[])},
+    purchase_stage: {touchpoints (string[]), pain_points (string[]), content_needs (string[])},
+    retention_stage: {touchpoints (string[]), pain_points (string[]), content_needs (string[])}
   }
 
 Return ONLY valid JSON, no markdown formatting.`;

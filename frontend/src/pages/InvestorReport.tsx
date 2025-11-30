@@ -1,8 +1,16 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Download, Loader2, FileText, TrendingUp, DollarSign, Target } from 'lucide-react';
-import api from '../utils/api';
-import { useToast } from '../context/ToastContext';
+import { useParams, useNavigate } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  ArrowLeft,
+  Download,
+  Loader2,
+  FileText,
+  TrendingUp,
+  DollarSign,
+  Target,
+} from "lucide-react";
+import api from "../utils/api";
+import { useToast } from "../context/ToastContext";
 
 interface InvestorReport {
   executiveSummary: string;
@@ -43,21 +51,22 @@ export default function InvestorReport() {
   const queryClient = useQueryClient();
 
   // Try to load existing report first
-  const { data: existingReport, isLoading: isLoadingExisting } = useQuery<InvestorReport | null>({
-    queryKey: ['investor-report', id],
-    queryFn: async () => {
-      try {
-        const response = await api.get(`/investor-reports/${id}`);
-        return response.data.report as InvestorReport;
-      } catch (error: any) {
-        if (error.response?.status === 404) {
-          return null;
+  const { data: existingReport, isLoading: isLoadingExisting } =
+    useQuery<InvestorReport | null>({
+      queryKey: ["investor-report", id],
+      queryFn: async () => {
+        try {
+          const response = await api.get(`/investor-reports/${id}`);
+          return response.data.report as InvestorReport;
+        } catch (error: any) {
+          if (error.response?.status === 404) {
+            return null;
+          }
+          throw error;
         }
-        throw error;
-      }
-    },
-    retry: false,
-  });
+      },
+      retry: false,
+    });
 
   const generateMutation = useMutation({
     mutationFn: async () => {
@@ -65,12 +74,12 @@ export default function InvestorReport() {
       return response.data.report as InvestorReport;
     },
     onSuccess: () => {
-      toast.success('Investor report generated and saved!');
+      toast.success("Investor report generated and saved!");
       // Invalidate and refetch the report
-      queryClient.invalidateQueries({ queryKey: ['investor-report', id] });
+      queryClient.invalidateQueries({ queryKey: ["investor-report", id] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.error || 'Failed to generate report');
+      toast.error(error.response?.data?.error || "Failed to generate report");
     },
   });
 
@@ -78,7 +87,7 @@ export default function InvestorReport() {
 
   if (isLoadingExisting) {
     return (
-      <div className="min-h-screen bg-[#030303] text-white flex items-center justify-center">
+      <div className="min-h-screen text-white flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-[#6366F1] animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Loading investor report...</p>
@@ -89,7 +98,7 @@ export default function InvestorReport() {
 
   if (!report && !generateMutation.isPending) {
     return (
-      <div className="min-h-screen bg-[#030303] text-white p-6">
+      <div className="min-h-screen text-white p-6">
         <div className="max-w-4xl mx-auto">
           <button
             onClick={() => navigate(-1)}
@@ -103,8 +112,8 @@ export default function InvestorReport() {
             <FileText className="w-16 h-16 text-[#6366F1] mx-auto mb-4" />
             <h1 className="text-3xl font-bold mb-4">Investor-Ready Report</h1>
             <p className="text-gray-400 mb-8">
-              Generate a comprehensive investor report with financial projections, pitch deck
-              outline, and funding ask.
+              Generate a comprehensive investor report with financial
+              projections, pitch deck outline, and funding ask.
             </p>
             <button
               onClick={() => generateMutation.mutate()}
@@ -131,7 +140,7 @@ export default function InvestorReport() {
 
   if (generateMutation.isPending) {
     return (
-      <div className="min-h-screen bg-[#030303] text-white flex items-center justify-center">
+      <div className="min-h-screen text-white flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-[#6366F1] animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Generating investor report...</p>
@@ -143,7 +152,7 @@ export default function InvestorReport() {
   if (!report) return null;
 
   return (
-    <div className="min-h-screen bg-[#030303] text-white p-6">
+    <div className="min-h-screen text-white p-6">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <button
@@ -156,10 +165,10 @@ export default function InvestorReport() {
           <button
             onClick={() => {
               const blob = new Blob([JSON.stringify(report, null, 2)], {
-                type: 'application/json',
+                type: "application/json",
               });
               const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
+              const a = document.createElement("a");
               a.href = url;
               a.download = `investor-report-${id}.json`;
               a.click();
@@ -175,7 +184,9 @@ export default function InvestorReport() {
           {/* Executive Summary */}
           <div className="bg-[#0A0A0A] rounded-2xl border border-white/10 p-6">
             <h2 className="text-2xl font-bold mb-4">Executive Summary</h2>
-            <p className="text-gray-300 leading-relaxed">{report.executiveSummary}</p>
+            <p className="text-gray-300 leading-relaxed">
+              {report.executiveSummary}
+            </p>
           </div>
 
           {/* Problem & Solution */}
@@ -205,7 +216,9 @@ export default function InvestorReport() {
               </div>
               <div>
                 <div className="text-sm text-gray-400 mb-1">Growth</div>
-                <div className="text-lg font-semibold">{report.marketOpportunity.growth}</div>
+                <div className="text-lg font-semibold">
+                  {report.marketOpportunity.growth}
+                </div>
               </div>
             </div>
             <div>
@@ -230,9 +243,15 @@ export default function InvestorReport() {
               <h3 className="text-xl font-semibold">Financial Projections</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[report.financialProjections.year1, report.financialProjections.year2, report.financialProjections.year3].map((year, idx) => (
+              {[
+                report.financialProjections.year1,
+                report.financialProjections.year2,
+                report.financialProjections.year3,
+              ].map((year, idx) => (
                 <div key={idx} className="bg-[#1A1A1A] rounded-lg p-4">
-                  <div className="text-sm text-gray-400 mb-3">Year {idx + 1}</div>
+                  <div className="text-sm text-gray-400 mb-3">
+                    Year {idx + 1}
+                  </div>
                   <div className="space-y-2">
                     <div>
                       <div className="text-xs text-gray-500">Revenue</div>
@@ -274,7 +293,10 @@ export default function InvestorReport() {
                 <div className="text-sm font-semibold mb-2">Use of Funds</div>
                 <ul className="space-y-1">
                   {report.fundingAsk.useOfFunds.map((item, idx) => (
-                    <li key={idx} className="text-sm text-gray-300 flex items-start gap-2">
+                    <li
+                      key={idx}
+                      className="text-sm text-gray-300 flex items-start gap-2"
+                    >
                       <span className="text-[#6366F1] mt-1">•</span>
                       {item}
                     </li>
@@ -285,7 +307,10 @@ export default function InvestorReport() {
                 <div className="text-sm font-semibold mb-2">Milestones</div>
                 <ul className="space-y-1">
                   {report.fundingAsk.milestones.map((item, idx) => (
-                    <li key={idx} className="text-sm text-gray-300 flex items-start gap-2">
+                    <li
+                      key={idx}
+                      className="text-sm text-gray-300 flex items-start gap-2"
+                    >
                       <span className="text-[#6366F1] mt-1">•</span>
                       {item}
                     </li>
@@ -314,4 +339,3 @@ export default function InvestorReport() {
     </div>
   );
 }
-
