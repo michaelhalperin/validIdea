@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { CheckCircle2, Circle, AlertCircle, CheckSquare } from 'lucide-react';
+import { CheckCircle2, Circle, CheckSquare } from 'lucide-react';
 import api from '../../utils/api';
 import { useToast } from '../../context/ToastContext';
 
