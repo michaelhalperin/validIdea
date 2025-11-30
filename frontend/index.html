@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#6366F1" />
     
     <!-- Primary Meta Tags -->
     <title>ValidIdea — AI-Powered Startup Idea Validator</title>
@@ -52,6 +53,8 @@
           "@type": "Organization",
           "@id": "https://valid-idea.vercel.app/#organization",
           "name": "ValidIdea",
+          "legalName": "ValidIdea",
+          "alternateName": "ValidIdea - Startup Idea Validator",
           "url": "https://valid-idea.vercel.app",
           "logo": {
             "@type": "ImageObject",
@@ -63,16 +66,24 @@
           "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "Customer Service",
-            "url": "https://valid-idea.vercel.app/contact"
-          }
+            "url": "https://valid-idea.vercel.app/contact",
+          },
+          "description": "ValidIdea is an AI-powered platform for validating and analyzing startup ideas"
         },
         {
           "@type": "WebSite",
           "@id": "https://valid-idea.vercel.app/#website",
           "url": "https://valid-idea.vercel.app",
           "name": "ValidIdea",
+          "alternateName": "ValidIdea - Startup Idea Validator",
           "description": "AI-powered startup idea validation and analysis tool",
+          "inLanguage": "en-US",
           "publisher": {
+            "@id": "https://valid-idea.vercel.app/#organization",
+            "@type": "Organization",
+            "name": "ValidIdea"
+          },
+          "copyrightHolder": {
             "@id": "https://valid-idea.vercel.app/#organization"
           },
           "potentialAction": {
