@@ -34,7 +34,7 @@ export default function Analytics() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#030303]">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-[#6366F1]/20 border-t-[#6366F1] rounded-full animate-spin" />
       </div>
     );
@@ -43,7 +43,7 @@ export default function Analytics() {
   if (!analytics) return null;
 
   return (
-    <div className="min-h-screen bg-[#030303] text-white p-6">
+    <div className="min-h-screen text-white p-6">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold mb-8">Analytics Dashboard</h1>
 

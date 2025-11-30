@@ -69,7 +69,7 @@ export default function IdeaOfTheDayPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-center bg-[#030303]">
+      <div className="min-h-screen flex flex-col items-center justify-center text-center">
         <Loader2 className="w-12 h-12 text-[#6366F1] animate-spin mb-4" />
         <p className="text-gray-400 animate-pulse">
           Loading Idea of the Day...
@@ -81,7 +81,7 @@ export default function IdeaOfTheDayPage() {
   // Handle generating status
   if (data && "status" in data && data.status === "generating") {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-center bg-[#030303] px-4">
+      <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
         <Loader2 className="w-16 h-16 text-[#6366F1] animate-spin mb-6" />
         <h2 className="text-2xl font-bold text-white mb-4">
           Generating Idea of the Day
@@ -99,7 +99,7 @@ export default function IdeaOfTheDayPage() {
 
   if (error || !data || !("id" in data) || !ideaData) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-center bg-[#030303] px-4">
+      <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
         <div className="text-red-400 mb-4">Error loading Idea of the Day</div>
         <Link to="/" className="text-[#6366F1] hover:underline">
           Return to Home
@@ -113,7 +113,7 @@ export default function IdeaOfTheDayPage() {
     (analysis.opportunity as any)?.score || analysis.confidenceOverall || 0;
 
   return (
-    <div className="min-h-screen bg-[#030303] text-white">
+    <div className="min-h-screen text-white">
       <div className="max-w-7xl mx-auto">
         {/* Hero Section */}
         <motion.div
