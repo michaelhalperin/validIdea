@@ -7,8 +7,14 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useSEO } from "../hooks/useSEO";
 
 export default function Terms() {
+  useSEO({
+    title: "Terms and Conditions — ValidIdea",
+    description: "Read ValidIdea's terms and conditions. Understand the rules and guidelines for using our startup validation platform.",
+    url: "/terms",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {

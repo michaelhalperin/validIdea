@@ -4,8 +4,14 @@ import { Mail, Send, Loader2, MessageSquare, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
 import api from "../utils/api";
+import { useSEO } from "../hooks/useSEO";
 
 export default function Contact() {
+  useSEO({
+    title: "Contact Us — ValidIdea",
+    description: "Get in touch with the ValidIdea team. We're here to help you validate your startup ideas.",
+    url: "/contact",
+  });
   const navigate = useNavigate();
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);

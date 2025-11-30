@@ -27,6 +27,7 @@ import {
 import SpotlightCard from "../components/ui/SpotlightCard";
 import CountUp from "../components/ui/CountUp";
 import { useState } from "react";
+import { useSEO } from "../hooks/useSEO";
 
 const DemoCard = ({
   title,
@@ -171,6 +172,7 @@ const TestimonialCard = ({
 );
 
 export default function Landing() {
+  useSEO(); // Use default SEO for landing page
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 150]);

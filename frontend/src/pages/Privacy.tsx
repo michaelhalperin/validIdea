@@ -2,8 +2,14 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Shield, Lock, Eye, Server } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useSEO } from "../hooks/useSEO";
 
 export default function Privacy() {
+  useSEO({
+    title: "Privacy Policy — ValidIdea",
+    description: "Learn how ValidIdea protects your privacy and handles your data. Our commitment to data security and user privacy.",
+    url: "/privacy",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {

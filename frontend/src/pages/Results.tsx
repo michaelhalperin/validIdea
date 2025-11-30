@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import api from '../utils/api';
 import { useToast } from '../context/ToastContext';
+import { useSEO } from '../hooks/useSEO';
 import type { Analysis, Idea } from '../types';
 import MarketAnalysis from '../components/analysis/MarketAnalysis';
 import StrategyAnalysis from '../components/analysis/StrategyAnalysis';
@@ -72,6 +73,18 @@ export default function Results() {
   });
 
   const analysis = ideaData?.analyses?.[0] as Analysis | undefined;
+
+  // Dynamic SEO based on idea data
+  useSEO(
+    ideaData
+      ? {
+          title: `${ideaData.title} — Analysis | ValidIdea`,
+          description: `${ideaData.oneLiner} — AI-powered analysis with market insights, competitor research, and feasibility assessment.`,
+          url: `/results/${id}`,
+          noindex: true, // Private analysis pages shouldn't be indexed
+        }
+      : undefined
+  );
 
   if (isLoading) {
     return (

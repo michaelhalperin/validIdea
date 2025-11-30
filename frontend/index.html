@@ -6,11 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Primary Meta Tags -->
-    <title>ValidIdea — AI-Powered Startup Idea Analysis & Validation Tool</title>
-    <meta name="title" content="ValidIdea — AI-Powered Startup Idea Analysis & Validation Tool" />
-    <meta name="description" content="Validate your startup ideas with AI-powered analysis. Get market size estimates, competitor research, SWOT analysis, technical feasibility, and MVP roadmaps. Powered by Google Gemini AI." />
+    <title>ValidIdea — AI-Powered Startup Idea Validator</title>
+    <meta name="title" content="ValidIdea — AI-Powered Startup Idea Validator" />
+    <meta name="description" content="Validate your startup ideas with AI-powered analysis. Get market insights, competitor research, feasibility checks, and MVP roadmaps instantly." />
     <meta name="keywords" content="startup validation, idea validation, startup analysis, AI startup analysis, market research, competitor analysis, SWOT analysis, MVP roadmap, startup ideas, business validation, idea analyzer, startup validator" />
     <meta name="author" content="ValidIdea" />
+    <meta name="application-name" content="ValidIdea" />
+    <meta name="apple-mobile-web-app-title" content="ValidIdea" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="English" />
     <meta name="revisit-after" content="7 days" />
@@ -21,17 +23,22 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://valid-idea.vercel.app/" />
-    <meta property="og:title" content="ValidIdea — AI-Powered Startup Idea Analysis" />
-    <meta property="og:description" content="Validate your startup ideas with AI-powered analysis. Get comprehensive market research, competitor analysis, and technical roadmaps." />
+    <meta property="og:title" content="ValidIdea — AI-Powered Startup Idea Validator" />
+    <meta property="og:description" content="Validate your startup ideas with AI-powered analysis. Get market insights, competitor research, feasibility checks, and MVP roadmaps instantly." />
     <meta property="og:image" content="https://valid-idea.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ValidIdea — AI-Powered Startup Idea Validator" />
     <meta property="og:site_name" content="ValidIdea" />
+    <meta property="og:locale" content="en_US" />
     
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://valid-idea.vercel.app/" />
-    <meta property="twitter:title" content="ValidIdea — AI-Powered Startup Idea Analysis" />
-    <meta property="twitter:description" content="Validate your startup ideas with AI-powered analysis. Get comprehensive market research, competitor analysis, and technical roadmaps." />
-    <meta property="twitter:image" content="https://valid-idea.vercel.app/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://valid-idea.vercel.app/" />
+    <meta name="twitter:title" content="ValidIdea — AI-Powered Startup Idea Validator" />
+    <meta name="twitter:description" content="Validate your startup ideas with AI-powered analysis. Get market insights, competitor research, feasibility checks, and MVP roadmaps instantly." />
+    <meta name="twitter:image" content="https://valid-idea.vercel.app/og-image.png" />
+    <meta name="twitter:image:alt" content="ValidIdea — AI-Powered Startup Idea Validator" />
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://valid-idea.vercel.app/" />
@@ -40,31 +47,95 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "ValidIdea",
-      "description": "AI-powered startup idea validation and analysis tool that provides comprehensive market research, competitor analysis, SWOT analysis, and technical roadmaps",
-      "url": "https://valid-idea.vercel.app",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "150"
-      },
-      "featureList": [
-        "AI-Powered Startup Analysis",
-        "Market Size Estimation (TAM/SAM/SOM)",
-        "Competitor Research",
-        "SWOT Analysis",
-        "Technical Feasibility Assessment",
-        "MVP Roadmap Generation",
-        "Cost Estimation",
-        "PDF Report Export"
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://valid-idea.vercel.app/#organization",
+          "name": "ValidIdea",
+          "url": "https://valid-idea.vercel.app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://valid-idea.vercel.app/og-image.png",
+            "width": 1200,
+            "height": 630
+          },
+          "sameAs": [],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Service",
+            "url": "https://valid-idea.vercel.app/contact"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://valid-idea.vercel.app/#website",
+          "url": "https://valid-idea.vercel.app",
+          "name": "ValidIdea",
+          "description": "AI-powered startup idea validation and analysis tool",
+          "publisher": {
+            "@id": "https://valid-idea.vercel.app/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://valid-idea.vercel.app/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://valid-idea.vercel.app/#webapp",
+          "name": "ValidIdea",
+          "alternateName": "ValidIdea - Startup Idea Validator",
+          "url": "https://valid-idea.vercel.app",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "150"
+          },
+          "featureList": [
+            "AI-Powered Startup Analysis",
+            "Market Size Estimation (TAM/SAM/SOM)",
+            "Competitor Research",
+            "SWOT Analysis",
+            "Technical Feasibility Assessment",
+            "MVP Roadmap Generation",
+            "Cost Estimation",
+            "PDF Report Export"
+          ],
+          "brand": {
+            "@type": "Brand",
+            "name": "ValidIdea"
+          },
+          "publisher": {
+            "@id": "https://valid-idea.vercel.app/#organization"
+          }
+        },
+        {
+          "@type": "Product",
+          "@id": "https://valid-idea.vercel.app/#product",
+          "name": "ValidIdea Startup Validator",
+          "description": "AI-powered tool for validating and analyzing startup ideas",
+          "brand": {
+            "@type": "Brand",
+            "name": "ValidIdea"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          }
+        }
       ]
     }
     </script>

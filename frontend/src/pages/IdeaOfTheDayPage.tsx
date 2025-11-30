@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import api from "../utils/api";
+import { useSEO } from "../hooks/useSEO";
 import type { Analysis } from "../types";
 import MarketAnalysis from "../components/analysis/MarketAnalysis";
 import StrategyAnalysis from "../components/analysis/StrategyAnalysis";
@@ -54,6 +55,18 @@ export default function IdeaOfTheDayPage() {
     },
   });
 
+  // Dynamic SEO for Idea of the Day - must be called before any conditional returns
+  const ideaData = data && "id" in data ? (data as IdeaOfTheDayData) : null;
+  useSEO(
+    ideaData
+      ? {
+          title: `${ideaData.title} — Idea of the Day | ValidIdea`,
+          description: `${ideaData.oneLiner} — Today's featured startup idea with complete AI-powered analysis.`,
+          url: `/idea-of-the-day${id ? `/${id}` : ''}`,
+        }
+      : undefined
+  );
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center bg-[#030303]">
@@ -84,7 +97,7 @@ export default function IdeaOfTheDayPage() {
     );
   }
 
-  if (error || !data || !("id" in data)) {
+  if (error || !data || !("id" in data) || !ideaData) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center bg-[#030303] px-4">
         <div className="text-red-400 mb-4">Error loading Idea of the Day</div>
@@ -95,7 +108,6 @@ export default function IdeaOfTheDayPage() {
     );
   }
 
-  const ideaData = data as IdeaOfTheDayData;
   const analysis = ideaData.analysis;
   const opportunityScore =
     (analysis.opportunity as any)?.score || analysis.confidenceOverall || 0;
